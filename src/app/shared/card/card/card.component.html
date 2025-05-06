@@ -1,0 +1,103 @@
+<div class="flex justify-content-between align-items-center flex-wrap">
+  <!-- product_1 -->
+  <!-- Array Of Cards -->
+  @for (product of products; track $index) {
+  <!--Change type class style  -->
+  <div
+    [ngClass]="{
+      'col-6': isSmallCard,
+      'col-12 md:col-4 lg:col-3': !isSmallCard
+    }"
+    class="col-6"
+  >
+    <div
+      [ngClass]="{
+        'flex flex-wrap lg:flex-nowrap justify-content-center gap-2':
+          isSmallCard,
+      }"
+    >
+      <figure
+        [routerLink]="['/user/details', product.id]"
+        [ngClass]="{
+          'md:w-6rem lg:w-9rem': isSmallCard,
+        }"
+        class="m-1 shadow-2 border-round-2xl overflow-hidden"
+      >
+        <img
+          #image
+          [ngClass]="{ 'h-full': isSmallCard, 'h-20rem': !isSmallCard }"
+          class="w-full cursor-pointer"
+          [src]="product.image"
+          (error)="
+            image.src =
+              'https://storage.googleapis.com/fir-auth-1c3bc.appspot.com/1692257709689-logitech%20heaphone.jpg'
+          "
+          alt=""
+        />
+      </figure>
+      <!-- content -->
+      <div class="content py-1 w-full">
+        <!-- paragraph -->
+        <p class="truncate-text overflow-hidden font-medium text-xs my-1">
+          {{ product.description }}
+        </p>
+        <div class="flex align-items-center gap-2">
+          <!-- price -->
+          <div class="price flex gap-2 align-items-center">
+            <span class="text-color-secondary font-bold">
+              <del>14</del>
+            </span>
+            <span class="new-price font-bold">
+              <span class="text-green-400">$</span>{{ product.price }}
+            </span>
+          </div>
+          <!-- offer -->
+          <div class="offer">
+            <span class="bg-red-500 p-1 border-circle text-white text-xs">{{
+              product.discount
+            }}</span>
+            <span class="font-bold text-xs px-1">off</span>
+          </div>
+        </div>
+      </div>
+      <!-- Button
+            Swap between [add to cart & go to cart] -->
+      @if (!isSmallCard) { @if(!product.isAddedToCart){
+      <p-button
+        (click)="addToCart(product); product.isAddedToCart = true"
+        label="add to cart"
+        severity="warning"
+        styleClass="my-2 uppercase w-full"
+        icon="pi pi-cart-plus text-xl"
+        iconPos="right"
+      />
+
+      } @if (product.isAddedToCart){
+      <p-button
+        [routerLink]="['/user/cart', product.id]"
+        label="go to cart"
+        severity="contrast"
+        styleClass="my-2 uppercase w-full"
+        icon="pi pi-shopping-cart text-xl"
+        iconPos="right"
+      />
+      } }
+    </div>
+  </div>
+  }@empty { @if (!isSmallCard) {
+  <div class="text-center lg:col-4 m-auto">
+    <app-empty></app-empty>
+    <h2 class="capitalize">
+      no product to show <span class="text-red-500">{{ searchKey }}</span>
+    </h2>
+    <p-button
+      [routerLink]="['/user/home']"
+      label="back to home"
+      severity="warning"
+      styleClass="my-2 uppercase w-full"
+      icon="pi pi-cart-plus text-xl"
+      iconPos="right"
+    />
+  </div>
+  } }
+</div>
